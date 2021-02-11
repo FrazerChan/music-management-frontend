@@ -10,13 +10,14 @@ function SearchResultsScreen({ location }) {
   const [albums, setAlbums] = useState();
   const [singers, setSingers] = useState();
   const [results, setResults] = useState();
+  const [query, setQuery] = useState();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
 
   const getQuery = () => {
     const { query } = queryString.parse(location.search);
-    return query;
+    return query ? query : "";
   };
 
   const loadResults = async () => {
@@ -42,24 +43,36 @@ function SearchResultsScreen({ location }) {
     setCurrentPage(pageNumber);
   };
 
+  const clearResults = () => {
+    setCurrentPage(0);
+    setNumberOfPages(0);
+    setResults();
+  };
+
   useEffect(() => {
-    loadResults();
-  }, []);
+    if (getQuery()) {
+      console.log("load");
+      loadResults();
+    } else {
+      console.log("clear");
+      clearResults();
+    }
+  }, [location]);
 
   return (
     <Screen>
       <h1>{"Results for: " + getQuery()} </h1>
-      <ul className="list-group">
+      <div className="container">
         {results?.map((record, index) => {
           if (index >= currentPage * 5 && index < currentPage * 5 + 5) {
             return (
-              <li className="list-group-item" key={"listItem" + index}>
-                <ResultRecord key={"record" + index} record={record} />
-              </li>
+              //   <li className="list-group-item" key={"listItem" + index}>
+              <ResultRecord key={"record" + index} record={record} />
+              //   </li>
             );
           }
         })}
-      </ul>
+      </div>
       <Pagination
         currentPage={currentPage}
         numberOfPages={numberOfPages}

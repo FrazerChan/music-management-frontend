@@ -19,3 +19,15 @@ code {
 .height-3em {
   height: 4em;
 }
+
+@media (max-width: 767.98px) {
+  .result-record {
+    font-size: 11pt;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .result-record {
+    font-size: 10pt;
+  }
+}
