@@ -22,7 +22,7 @@ function SearchResultsScreen({ location }) {
 
   const loadResults = async () => {
     const response = await axios.get(
-      "http://localhost:8080/searchAlbums/" + getQuery()
+      "http://localhost:8080/searchAlbumsAndSingers/" + getQuery()
     );
 
     if (response.data) {
