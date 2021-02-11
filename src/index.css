@@ -15,3 +15,7 @@ code {
 .navbar {
   margin-bottom: 2em;
 }
+
+.height-3em {
+  height: 4em;
+}
