@@ -54,7 +54,6 @@ function LoginForm(props) {
           value={username}
         />
         <InputField
-          autofocus={true}
           error={passwordError}
           label="Password"
           name="password"

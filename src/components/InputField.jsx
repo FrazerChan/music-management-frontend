@@ -18,6 +18,7 @@ function InputField({
         autoFocus={autoFocus}
         className="form-control"
         id={name}
+        name={name}
         onChange={onChange}
         type={type}
         value={value}

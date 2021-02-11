@@ -7,10 +7,7 @@ import Pagination from "../components/Pagination";
 import ResultRecord from "../components/ResultRecord";
 
 function SearchResultsScreen({ location }) {
-  const [albums, setAlbums] = useState();
-  const [singers, setSingers] = useState();
   const [results, setResults] = useState();
-  const [query, setQuery] = useState();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
@@ -26,9 +23,7 @@ function SearchResultsScreen({ location }) {
     );
 
     if (response.data) {
-      setAlbums(response.data.albums);
-      setSingers(response.data.singers);
-      setResults(response.data.albums.concat(response.data.singers));
+      setResults(response.data.singers.concat(response.data.albums));
       setCurrentPage(0);
       setNumberOfPages(
         // response.data.singers.length / 5
@@ -63,6 +58,13 @@ function SearchResultsScreen({ location }) {
     <Screen>
       <h1>{"Results for: " + getQuery()} </h1>
       <div className="container">
+        <div className="row border py-1 result-record">
+          <div className={"col height-3em"}>Record type</div>
+          <div className={"col height-3em"}>Singer</div>
+          <div className={"col height-3em"}>Sex/Album</div>
+          <div className={"col height-3em"}>DOB/Year</div>
+          <div className={"col-4 height-3em"}>Company</div>
+        </div>
         {results?.map((record, index) => {
           if (index >= currentPage * 5 && index < currentPage * 5 + 5) {
             return (
