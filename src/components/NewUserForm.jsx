@@ -22,8 +22,8 @@ function NewUserForm(props) {
     if (error) return;
     try {
       const response = await axios.post(settings.apiEndpoint + "add_user", {
-        user: username.trim(),
-        pass: password.trim(),
+        username: username.trim(),
+        password: password.trim(),
       });
 
       setRequestError();
@@ -109,11 +109,11 @@ function NewUserForm(props) {
             Submit
           </button>
         </form>
-        {requestError && (
-          <div className="alert alert-danger mt-2">{requestError}</div>
-        )}
         {requestSuccess && (
           <div className="alert alert-success mt-2">{requestSuccess}</div>
+        )}
+        {requestError && (
+          <div className="alert alert-danger mt-2">{requestError}</div>
         )}
       </div>
     </div>

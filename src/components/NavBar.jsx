@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 
-function NavBar(props) {
+function NavBar({ user }) {
   const [open, setOpen] = useState();
 
   const handlePress = () => {
@@ -31,26 +31,37 @@ function NavBar(props) {
           id="navbarNav"
         >
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/catalogue-search">
-                Catalogue Search
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/search-results">
-                Search Results
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/insert-data">
-                Insert Data
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/login">
-                Login
-              </NavLink>
-            </li>
+            {user && (
+              <React.Fragment>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/catalogue-search">
+                    Catalogue Search
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/search-results">
+                    Search Results
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/insert-data">
+                    Insert Data
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/logout">
+                    Logout
+                  </NavLink>
+                </li>
+              </React.Fragment>
+            )}
+            {!user && (
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/login">
+                  Login
+                </NavLink>
+              </li>
+            )}
           </ul>
         </div>
       </div>

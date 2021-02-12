@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 import InputField from "./InputField";
+import settings from "../config/settings";
 
 function LoginForm(props) {
   const [username, setUsername] = useState("");
@@ -8,13 +10,31 @@ function LoginForm(props) {
   const [usernameError, setUsernameError] = useState();
   const [passwordError, setPasswordError] = useState();
 
-  const handleSubmit = (e) => {
+  const [requestError, setRequestError] = useState();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const error = validate();
     if (error) return;
-    console.log(username);
-    console.log(password);
+    try {
+      const response = await axios.post(settings.apiEndpoint + "authenticate", {
+        username: username.trim(),
+        password: password.trim(),
+      });
+
+      localStorage.setItem("token", response.data.token);
+      window.location = "/";
+
+      setRequestError();
+    } catch (error) {
+      console.log(error);
+      if (error.response?.status === 400) {
+        setRequestError("Invalid username or password");
+      } else {
+        setRequestError("An unexpected error has occured.");
+      }
+    }
   };
 
   const handleUsernameChange = (e) => {
@@ -65,6 +85,9 @@ function LoginForm(props) {
           Submit
         </button>
       </form>
+      {requestError && (
+        <div className="alert alert-danger mt-2">{requestError}</div>
+      )}
     </div>
   );
 }

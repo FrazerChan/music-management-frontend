@@ -6,6 +6,10 @@ import Screen from "../components/Screen";
 import Pagination from "../components/Pagination";
 import ResultRecord from "../components/ResultRecord";
 
+axios.defaults.headers.common["Authorization"] = localStorage.getItem("token")
+  ? "Bearer " + localStorage.getItem("token")
+  : undefined;
+
 function SearchResultsScreen({ location }) {
   const [results, setResults] = useState();
 
@@ -18,18 +22,22 @@ function SearchResultsScreen({ location }) {
   };
 
   const loadResults = async () => {
-    const response = await axios.get(
-      "http://localhost:8080/searchAlbumsAndSingers/" + getQuery()
-    );
-
-    if (response.data) {
-      setResults(response.data.singers.concat(response.data.albums));
-      setCurrentPage(0);
-      setNumberOfPages(
-        Math.ceil(
-          (response.data.albums.length + response.data.singers.length) / 5
-        )
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/searchAlbumsAndSingers/" + getQuery()
       );
+
+      if (response.data) {
+        setResults(response.data.singers.concat(response.data.albums));
+        setCurrentPage(0);
+        setNumberOfPages(
+          Math.ceil(
+            (response.data.albums.length + response.data.singers.length) / 5
+          )
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
