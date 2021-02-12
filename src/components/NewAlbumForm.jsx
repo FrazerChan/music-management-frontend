@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 import InputField from "./InputField";
+import settings from "../config/settings";
 
 function NewAlbumForm(props) {
   const [album, setAlbum] = useState("");
@@ -12,15 +14,32 @@ function NewAlbumForm(props) {
   const [yearError, setYearError] = useState();
   const [companyError, setCompanyError] = useState();
 
-  const handleSubmit = (e) => {
+  const [requestError, setRequestError] = useState();
+  const [requestSuccess, setRequestSuccess] = useState();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const error = validate();
     if (error) return;
-    console.log(album);
-    console.log(singer);
-    console.log(year);
-    console.log(company);
+    try {
+      const response = await axios.post(settings.apiEndpoint + "add_album", {
+        album: album.trim(),
+        singer: singer.trim(),
+        year: year.trim(),
+        company: company.trim(),
+      });
+
+      setRequestError();
+      setRequestSuccess("Album added.");
+    } catch (error) {
+      if (error.response?.status === 409) {
+        setRequestError("Album already exists.");
+      } else {
+        setRequestError("An unexpected error has occured.");
+      }
+      setRequestSuccess();
+    }
   };
 
   const handleAlbumChange = (e) => {
@@ -83,14 +102,14 @@ function NewAlbumForm(props) {
           />
           <InputField
             error={singerError}
-            label="Singer (YYYYMMDD)"
+            label="Singer"
             name="singer"
             onChange={handleSingerChange}
             value={singer}
           />
           <InputField
             error={yearError}
-            label="Year"
+            label="Year YYYY"
             name="year"
             onChange={handleYearChange}
             value={year}
@@ -106,6 +125,12 @@ function NewAlbumForm(props) {
             Submit
           </button>
         </form>
+        {requestError && (
+          <div className="alert alert-danger mt-2">{requestError}</div>
+        )}
+        {requestSuccess && (
+          <div className="alert alert-success mt-2">{requestSuccess}</div>
+        )}
       </div>
     </div>
   );

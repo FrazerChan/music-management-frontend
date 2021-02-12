@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from "axios";
+import settings from "../config/settings";
 import InputField from "./InputField";
 
 function NewUserForm(props) {
@@ -10,14 +12,30 @@ function NewUserForm(props) {
   const [passwordError, setPasswordError] = useState();
   const [matchingPasswordError, setMatchingPasswordError] = useState();
 
-  const handleSubmit = (e) => {
+  const [requestError, setRequestError] = useState();
+  const [requestSuccess, setRequestSuccess] = useState();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const error = validate();
     if (error) return;
-    console.log(username);
-    console.log(password);
-    console.log(matchingPassword);
+    try {
+      const response = await axios.post(settings.apiEndpoint + "add_user", {
+        user: username.trim(),
+        pass: password.trim(),
+      });
+
+      setRequestError();
+      setRequestSuccess("User added.");
+    } catch (error) {
+      if (error.response?.status === 409) {
+        setRequestError("User already exists.");
+      } else {
+        setRequestError("An unexpected error has occured.");
+      }
+      setRequestSuccess();
+    }
   };
 
   const handleUsernameChange = (e) => {
@@ -91,6 +109,12 @@ function NewUserForm(props) {
             Submit
           </button>
         </form>
+        {requestError && (
+          <div className="alert alert-danger mt-2">{requestError}</div>
+        )}
+        {requestSuccess && (
+          <div className="alert alert-success mt-2">{requestSuccess}</div>
+        )}
       </div>
     </div>
   );

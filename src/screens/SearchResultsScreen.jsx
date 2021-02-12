@@ -26,8 +26,9 @@ function SearchResultsScreen({ location }) {
       setResults(response.data.singers.concat(response.data.albums));
       setCurrentPage(0);
       setNumberOfPages(
-        // response.data.singers.length / 5
-        (response.data.albums.length + response.data.singers.length) / 5
+        Math.ceil(
+          (response.data.albums.length + response.data.singers.length) / 5
+        )
       );
     }
   };
@@ -46,10 +47,8 @@ function SearchResultsScreen({ location }) {
 
   useEffect(() => {
     if (getQuery()) {
-      console.log("load");
       loadResults();
     } else {
-      console.log("clear");
       clearResults();
     }
   }, [location]);

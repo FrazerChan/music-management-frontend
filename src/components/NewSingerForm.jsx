@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 import InputField from "./InputField";
+import settings from "../config/settings";
 
 function NewSingerForm(props) {
   const [name, setName] = useState("");
@@ -12,15 +14,32 @@ function NewSingerForm(props) {
   const [sexError, setSexError] = useState();
   const [companyError, setCompanyError] = useState();
 
-  const handleSubmit = (e) => {
+  const [requestError, setRequestError] = useState();
+  const [requestSuccess, setRequestSuccess] = useState();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const error = validate();
     if (error) return;
-    console.log(name);
-    console.log(dob);
-    console.log(sex);
-    console.log(company);
+    try {
+      const response = await axios.post(settings.apiEndpoint + "add_singer", {
+        name: name.trim(),
+        dob: dob.trim(),
+        sex: sex.trim(),
+        company: company.trim(),
+      });
+
+      setRequestError();
+      setRequestSuccess("Singer added.");
+    } catch (error) {
+      if (error.response?.status === 409) {
+        setRequestError("Singer already exists.");
+      } else {
+        setRequestError("An unexpected error has occured.");
+      }
+      setRequestSuccess();
+    }
   };
 
   const handleNameChange = (e) => {
@@ -106,6 +125,12 @@ function NewSingerForm(props) {
             Submit
           </button>
         </form>
+        {requestError && (
+          <div className="alert alert-danger mt-2">{requestError}</div>
+        )}
+        {requestSuccess && (
+          <div className="alert alert-success mt-2">{requestSuccess}</div>
+        )}
       </div>
     </div>
   );
