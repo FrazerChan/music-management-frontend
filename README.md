@@ -11,7 +11,7 @@ At the top of the project run:
 
 This should open the app in your browser, otherwise go to:
 
-<b><i>localhost:3000</b></i>
+<b><i>http://localhost:3000</b></i>
 
 to start it yourself.
 
