@@ -12,10 +12,6 @@ code {
     monospace;
 }
 
-.navbar {
-  margin-bottom: 2em;
-}
-
 .height-3em {
   height: 4em;
 }
@@ -29,5 +25,36 @@ code {
 @media (max-width: 575.98px) {
   .result-record {
     font-size: 10pt;
+  }
+}
+
+svg {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.wave-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.wave-push {
+  background-color: #343a40;
+  height: 25vh;
+}
+
+@media (min-width: 992px) {
+  .welcome-container {
+    max-width: 60%;
+  }
+
+  .welcome-message {
+    font-size: 38pt;
   }
 }
